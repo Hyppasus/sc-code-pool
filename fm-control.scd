@@ -4,6 +4,8 @@
 // another button could activate the type of modulation amplitude modulation or frequency modulation
 // another button could change the type of interaction between the two oscillators, i.e. adding delays with lag
 
+// WE NEED LEDS!!!!! 8??
+
 /*############################################################################################################*/
 // The concept:
 
