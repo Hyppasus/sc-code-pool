@@ -1,4 +1,8 @@
+// use carSomething for the carrier synths. Out.ar
+// use modSomething for the modulator synth. Out.kr(bus..
+// explore deterministic and non deterministic waveforms
 
+/*######### Carriers ##############*/
 
 (
 SynthDef("carPulse", {|bus=0, freq=200, iphase=0, width=0.5, amp=1|
@@ -7,7 +11,7 @@ SynthDef("carPulse", {|bus=0, freq=200, iphase=0, width=0.5, amp=1|
 
 
 
-
+/*######### Modulators ##############*/
 
 (
 SynthDef("modPulse", {|bus=4, freq=200, iphase=0, width=0.5, mul=1, add=0|
