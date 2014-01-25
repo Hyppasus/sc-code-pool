@@ -56,5 +56,10 @@ SynthDef("modGendy", {|bus=4, freq=200, mul=1, add=0|
 
 s.sync;
 
+MIDIClient.init;
+MIDIIn.connectAll;
+
+s.sync;
+
 
 }
