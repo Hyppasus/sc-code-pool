@@ -42,6 +42,17 @@ SynthDef("modNoise2", {|bus=4, freq=200, mul=1, add=0|
 	Out.kr(bus, LFNoise2.kr(freq, mul, add));}).add;
 );
 
+(
+SynthDef("modDust", {|bus=4, freq=200, mul=1, add=0|
+	Out.kr(bus, Dust.kr(freq, mul, add));}).add;
+);
+
+(
+SynthDef("modGendy", {|bus=4, freq=200, mul=1, add=0|
+	Out.kr(bus, Gendy3.kr(Rand(1,6), Rand(1,6), 1, 1, freq, 1, 1, 12 ,12, mul, add));}).add;
+);
+
+
 
 //
 // (
