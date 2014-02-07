@@ -1,9 +1,31 @@
+s.boot;
+
 //Evaluate line by line
 
 ~bufTableCar=Buffer.alloc(s,1024, bufnum:0);
 ~bufTableMod=Buffer.alloc(s,1024, bufnum:1);
 ~envTableCar=Env([0]++ [1, 0.5]++0, [0.1, 0.1, 0.1], \sine).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar);
 ~envTableMod=Env([0]++ [1, 0.5]++0, [0.1, 0.1, 0.1], \sine).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);
+
+
+
+~getWave = {
+	|kind=0|
+	case
+	{kind==0}
+	{~envTableMod=Env([0]++ [1, 0.5]++0, [0.1, 0.2, 0.1], \sine).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);}
+	{kind==1}
+	{~envTableMod=Env([0]++ [1, 0.5]++0, [0.1, 0.1, 0.1], \sine).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);}
+
+}
+
+(
+~envTableMod=Env([0]++ [1, 0.5]++0, [0.1, 0.2, 0.3], \sqr).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);
+~envTableMod.plot();
+)
+~getWave.value(0);
+
+
 
 (
 //a Wavetable carrier
