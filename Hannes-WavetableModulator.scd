@@ -9,22 +9,32 @@ s.boot;
 
 
 
-~getWave = {
+~getWave = { //TODO: needs normalization
 	|kind=0|
 	case
 	{kind==0}
-	{~envTableMod=Env([0]++ [1, 0.5]++0, [0.1, 0.2, 0.1], \sine).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);}
+	{~envTableMod=Env([0]++ [1, 0.8]++(-1), [0.5, 0.8, 0.3], \sqr).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);}
 	{kind==1}
-	{~envTableMod=Env([0]++ [1, 0.5]++0, [0.1, 0.1, 0.1], \sine).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);}
+	{~envTableMod=Env([0]++ [0, 1]++(0), [-0.1, 0.2, 0.2], \wel).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);}
+	{kind==2}
+	{~envTableMod=Env([1,2, 0.5]++ [0, 1]++(0), [-0.1, 0.2, 0.2], \sin).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);}
+	{kind==3}
+	{~envTableMod=Env([1,2, 0.5, 2]++ [0, 1]++(0), [-0.1, 0.2, 0.2], \sin).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);}
+	{kind==4}
+	{~envTableMod=Env([1,2, 0.5]++ [0, 1]++(0), [-0.7, 0.5, -0.2], \cub).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);}
+	{kind==5}
+	{~envTableMod=Env([1,2, 0.5]++ [0, 1]++(0), [-0.7, 0.5, -0.2], \cub).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);}
 
 }
 
+/*
 (
-~envTableMod=Env([0]++ [1, 0.5]++0, [0.1, 0.2, 0.3], \sqr).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);
+~envTableMod=Env([1,-2, 0.5]++ [1, -1]++(0), [-0.7, 0, -0.2], \sin).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod);
 ~envTableMod.plot();
 )
-~getWave.value(0);
-
+*/
+~getWave.value(5);
+~envTableMod.plot();
 
 
 (
