@@ -1,5 +1,5 @@
 // Wave table Frequency Modulation
-
+(
 Server.default.waitForBoot{
 
 	Server.default = s;
@@ -64,81 +64,76 @@ Server.default.waitForBoot{
 
 // Declare functions to controle the synths
 
-~getWave = {
-	|kind=0|
-	case
-	{kind==0}
-	{~envTableMod=Env([0]++ [1, 0.8]++(0), [0.5, 0.8, 0.3], \sqr).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
-	{kind==1}
-	{~envTableMod=Env([0]++ [0.5, 1]++(0), [0.1, 0.2, 0.2], \wel).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
-	{kind==2}
-	{~envTableMod=Env([0] ++ [0.7, 0.12, 0.5]++ (0), [0.1, 0.2, 0.2], \sin).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
-	{kind==3}
-	{~envTableMod=Env([0] ++ [1, 0.2, 0.5, 0.2] ++ (0), [0.1, 0.2, 0.2], \sin).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
-	{kind==4}
-	{~envTableMod=Env([0] ++ [1, 0.6, 0.5] ++(0), [0.7, 0.5, 0.2], \cub).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
-	{kind==5}
-	{~envTableMod=Env([0] ++ [-0.2, 0.8, 1]++(0), [0.7, 0.5, 0.2], \cub).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
 
+	~getWaveCar = {
+		|kind=0|
+		case
+		{kind==0}
+		{~envTableCar=Env([0]++ [-0.41, 0.8]++(0), [0.5, 0.8, 0.3],\sqr).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
+		{kind==1}
+		{~envTableCar=Env([0]++ [-0.1, 1]++(0), [0.1, 0.2, 0.2], \wel).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
+		{kind==2}
+		{~envTableCar=Env([0] ++ [0, -0.12, 0.5]++ (0), [0.1, 0.2, 0.2], \sin).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
+		{kind==3}
+		{~envTableCar=Env([0] ++ [1, -0.2, 0.5, 0.2] ++ (0), [0.1, 0.2, 0.2], \sin).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
+		{kind==4}
+		{~envTableCar=Env([0] ++ [1, -0.6, 0.5] ++(0), [0.7, 0.5, 0.2], \cub).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
+		{kind==5}
+		{~envTableCar=Env([0] ++ [-0.2, 0.8, 1]++(0), [0.7, 0.5, 0.2], \cub).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
+	};
+
+
+	~getWaveMod = {
+		|kind=0|
+		case
+		{kind==0}
+		{~envTableMod=Env([0]++ [1, 0.8]++(0), [0.5, 0.8, 0.3], \sqr).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
+		{kind==1}
+		{~envTableMod=Env([0]++ [0.5, 1]++(0), [0.1, 0.2, 0.2], \wel).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
+		{kind==2}
+		{~envTableMod=Env([0] ++ [0.7, 0.12, 0.5]++ (0), [0.1, 0.2, 0.2], \sin).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
+		{kind==3}
+		{~envTableMod=Env([0] ++ [1, 0.2, 0.5, 0.2] ++ (0), [0.1, 0.2, 0.2], \sin).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
+		{kind==4}
+		{~envTableMod=Env([0] ++ [1, 0.6, 0.5] ++(0), [0.7, 0.5, 0.2], \cub).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
+		{kind==5}
+		{~envTableMod=Env([0] ++ [-0.2, 0.8, 1]++(0), [0.7, 0.5, 0.2], \cub).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
 };
 
 
-~getWaveCar = {
-	|kind=0|
-	case
-	{kind==0}
-	{~envTableCar=Env([0]++ [-0.41, 0.8]++(0), [0.5, 0.8, 0.3], \sqr).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
-	{kind==1}
-	{~envTableCar=Env([0]++ [-0.1, 1]++(0), [0.1, 0.2, 0.2], \wel).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
-	{kind==2}
-	{~envTableCar=Env([0] ++ [0, -0.12, 0.5]++ (0), [0.1, 0.2, 0.2], \sin).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
-	{kind==3}
-	{~envTableCar=Env([0] ++ [1, -0.2, 0.5, 0.2] ++ (0), [0.1, 0.2, 0.2], \sin).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
-	{kind==4}
-	{~envTableCar=Env([0] ++ [1, -0.6, 0.5] ++(0), [0.7, 0.5, 0.2], \cub).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
-	{kind==5}
-	{~envTableCar=Env([0] ++ [-0.2, 0.8, 1]++(0), [0.7, 0.5, 0.2], \cub).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableMod)}
-
-};
-
-
-~ampCar = {|amp=0| s.sendMsg(\n_set, 1010, \amp, amp)};
-~freqCar = {|freq=440| s.sendBundle(nil,[\n_set, 1010, \freq, freq])};
-~freqMod = {|freq = 440| s.sendMsg(\n_set, 1030, \freq, freq)};
-~mulMod = {|mul = 0| s.sendMsg(\n_set, 1030, \mul, mul)};
-~addMod = {|add = 0| s.sendMsg(\n_set, 1030, \add, add)};
+	~ampCar = {|amp=0| s.sendMsg(\n_set, 1010, \amp, amp)};
+	~freqCar = {|freq=440| s.sendBundle(nil,[\n_set, 1010, \freq, freq])};
+	~freqMod = {|freq = 440| s.sendMsg(\n_set, 1030, \freq, freq)};
+	~mulMod = {|mul = 0| s.sendMsg(\n_set, 1030, \mul, mul)};
+	~addMod = {|add = 0| s.sendMsg(\n_set, 1030, \add, add)};
 
 
 //MIDI mapping
 
+	MIDIFunc.cc({|val,num,ch,src| ~ampCar.value(val.linlin(0, 127, 0.0, 1.0))}, ~ampCarCC, ~channelMIDI);
+	MIDIFunc.cc({|val,num,ch,src| ~freqCar.value(val.linlin(0, 127, 200, 2000))}, ~freqCarCC, ~channelMIDI);
+	MIDIFunc.cc({|val,num,ch,src| ~freqMod.value(val.linlin(0, 127, 0.1, 1000))}, ~freqModCC, ~channelMIDI);
+	MIDIFunc.cc({|val,num,ch,src| ~mulMod.value(val.linlin(0, 127, 1.0, 1000.0))}, ~mulModCC, ~channelMIDI);
+	MIDIFunc.cc({|val,num,ch,src| ~addMod.value(val.linlin(0, 127, 1.0, 1000.0))}, ~addModCC, ~channelMIDI);
 
 
-MIDIFunc.cc({|val,num,ch,src| ~ampCar.value(val.linlin(0, 127, 0.0, 1.0))}, ~ampCarCC, ~channelMIDI);
-MIDIFunc.cc({|val,num,ch,src| ~freqCar.value(val.linlin(0, 127, 200, 2000))}, ~freqCarCC, ~channelMIDI);
-MIDIFunc.cc({|val,num,ch,src| ~freqMod.value(val.linlin(0, 127, 0.1, 1000))}, ~freqModCC, ~channelMIDI);
-MIDIFunc.cc({|val,num,ch,src| ~mulMod.value(val.linlin(0, 127, 1.0, 1000.0))}, ~mulModCC, ~channelMIDI);
-MIDIFunc.cc({|val,num,ch,src| ~addMod.value(val.linlin(0, 127, 1.0, 1000.0))}, ~addModCC, ~channelMIDI);
 
-~table =0;//init a variable to scan the tables
+	~tableCar =0;    //init a variable to scan the tables
+	MIDIFunc.cc({|val, num, ch, src| if(val == 127 and:{val != 0}){
+		~tableCar = ~tableCar + 1 % 6;
+		~getWaveCar.value(~tableCar);
+	}}, ~tableCarCC, ~channelMIDI);
 
-MIDIFunc.cc({|val, num, ch, src| if(val == 127 and:{val != 0}){
-			~table = ~table + 1 % 6;
-	~getWave.value(~table);
-		// ~table.postln;
-}}, ~tableCC, ~channelMIDI);
-
-		~tableCar =0;
-MIDIFunc.cc({|val, num, ch, src| if(val == 127 and:{val != 0}){
-			~tableCar = ~tableCar + 1 % 6;
-	~getWave.value(~tableCar);
-		// ~tableCar.postln;
-}}, ~tableCarCC, ~channelMIDI);
-
+	~tableMod =0;
+	MIDIFunc.cc({|val, num, ch, src| if(val == 127 and:{val != 0}){
+		~tableMod = ~tableMod + 1 % 6;
+		~getWaveMod.value(~tableMod);
+	}}, ~tableCC, ~channelMIDI);
 
 
 	"\n \n \n Ready to play".postln;
-
 }
+)
 
 
 /*
