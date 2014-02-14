@@ -84,6 +84,7 @@ Server.default.waitForBoot{
 		{kind == 5}
 		{~envTableCar = Env([0] ++ [-0.2, 0.8, 1]++(0), [0.7, 0.5, 0.2], \cub).asSignal(512).asWavetable;~bufTableCar.setn(0,~envTableCar)}
 		{kind == 6}
+
 	};
 
 
@@ -102,7 +103,8 @@ Server.default.waitForBoot{
 		{~envTableMod = Env([0] ++ [1, 0.6, 0.5] ++(0), [0.7, 0.5, 0.2], \cub).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
 		{kind == 5}
 		{~envTableMod = Env([0] ++ [-0.2, 0.8, 1]++(0), [0.7, 0.5, 0.2], \cub).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
-};
+		{kind == 6} //The profil of Stockhausen as a Wavetabel
+		{~envTableMod = Env(([0] ++ [0, 16, 27, 36, 40, 43, 44, 47, 50, 51, 53, 55, 57, 58, 60, 61, 63, 65, 67, 67, 68, 70, 71, 72, 72, 72, 72, 72, 73, 74, 77, 78, 80, 82, 84, 86, 87, 88, 88, 87, 81, 71, 70, 69, 69, 68, 59, 60, 63, 63, 60, 58, 57, 57, 58, 58, 54, 50, 42, 35, 27, 18,11,0]++0)*0.01,Array.fill(63,0.1),\sine).asSignal(512).asWavetable;~bufTableMod.setn(0,~envTableMod)}
 
 
 	~ampCar = {|amp = 0| s.sendMsg(\n_set, 1010, \amp, amp)};
@@ -128,7 +130,7 @@ Server.default.waitForBoot{
 
 	~tableMod =0;
 	MIDIFunc.cc({|val, num, ch, src| if(val == 127 and:{val != 0}){
-		~tableMod = ~tableMod + 1 % 6;
+		~tableMod = ~tableMod + 1 % 7;
 		~getWaveMod.value(~tableMod);
 	}}, ~tableCC, ~channelMIDI);
 
