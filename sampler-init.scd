@@ -25,9 +25,13 @@ Server.default.waitForBoot{
 
 	// allocate buffer
 	// p = "~/Sounds/";
-	p = "/Users/alfredoardia/Documents/Ableton/User Library/Samples/My samples/doors/door1.wav";
-	b = Buffer.read(s, p,);
-
+	//p = "/Users/alfredoardia/Documents/Ableton/User Library/Samples/My samples/doors/door1.wav";
+	
+	
+	~paths = [];
+	"/Users/Sounds/*.wav".pathMatch.collect{|path|~paths=~paths.add(path)};
+	~buffer = Buffer.read(s, ~paths[0]);
+	
 	// synth
 	// !!!! PROBLEM IN THE LOOP START, LENGHT, RETRIGGER !!!
 
