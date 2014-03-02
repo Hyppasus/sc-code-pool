@@ -50,17 +50,21 @@ SynthDef(\sinewave, {|freq = 1, amp=0.5, bus=0, inBus=402|
 
 s.sendMsg(\s_new, "arbitrary", 1010, 1, 1);
 
-s.sendMsg(\c_set, 402, -0.5); // create the bus
+//s.sendMsg(\c_set, 402, -0.5); // create the bus
 
 s.sendMsg(\s_new, "sinewave", 1020, 1, 1);
 
-s.sendMsg(\n_set, 1010, \bus, 402);
+//s.sendMsg(\n_set, 1010, \bus, 402);
 
-s.sendMsg(\n_map, 1020, "freq", 402); // ask this synth to read the freq from this bus
+s.sendMsg(\n_set, 1020, \freq, 0.4);
+
+//s.sendMsg(\n_map, 1020, "freq", 402); // ask this synth to read the freq from this bus
+
+s.sendMsg(\n_set, 1010, \freq, 1);
 
 s.sendMsg(\n_set, 1010, \mul, 1000);
 
-s.sendMsg(\n_set, 1010, \add, 100);
+s.sendMsg(\n_set, 1010, \add, 10);
 
 //s.reboot
 //s.boot
