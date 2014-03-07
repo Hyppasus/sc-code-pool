@@ -1,3 +1,17 @@
+
+//Debugging
+
+y={|bus=65, out=0|Out.ar(out,SinOsc.ar(In.ar(bus)+200,0,1,0))}.play;
+x={|freq=440, out=0, mul=1,add=0|Out.ar(out,SinOsc.ar(freq,0,mul,add))}.play;
+x.set(\out,65);
+x.set(\freq, 1);
+x.set(\mul, 100);
+x.set(\add, 100);
+
+
+/*#####################################################################################################################################*/
+// new version
+
 ~bufTableCar=Buffer.alloc(s, 1024, bufnum:0);
 ~envTableCar=Env([0] ++ [-1, 0.5] ++ 0, [0.1, 0.1, 0.1], \sine).asSignal(512).asWavetable;~bufTableCar.setn(0, ~envTableCar);
 ~allvalues = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -23,7 +37,7 @@ MIDIFunc.cc({|val, num, ch, src| ~waveformArbitrary.value(num, val.linlin(0,127,
 (
 ~waveformArbitrary = {|num, val|
 	~allvalues[num] = val;
-	~testenvelope = Env([0] ++ ~allvalues ++ 0, [1, 1, 1, 1, 1, 1, 1, 1, 1], \sine).asSignal(512).asWavetable;
+	~testenvelope = Env(~allvalues ++ ~allvalues[0], [1, 1, 1, 1, 1, 1, 1, 1, 1], \sine).asSignal(512).asWavetable;
 	~bufTableCar.setn(0,~testenvelope);
 };
 );
@@ -31,40 +45,32 @@ MIDIFunc.cc({|val, num, ch, src| ~waveformArbitrary.value(num, val.linlin(0,127,
 
 // SynthDefs
 (
-SynthDef(\arbitrary,{|freq=400, amp=0.1, bus=0, bufnum=0, gate=1, mul=1, add=0|
-	var output, env;
-	env = EnvGen.ar(Env.asr(0.01, 1, 0.01), gate, doneAction:2);
-	output = Osc.ar(bufnum, freq, 0, mul, add);
-	Out.ar(bus, output * amp * env);
+SynthDef(\arbitrary,{|freq=400, amp=1.0, bus=0, bufnum=0|
+	var output;
+	output = Osc.ar(bufnum, freq, 0);
+	Out.ar(bus, output * amp);
 }).add;
 );
 
 
 (
 //changing it to control a sinosc
-SynthDef(\sinewave, {|freq = 1, amp=0.5, bus=0, inBus=402|
-	var output = SinOsc.ar(In.ar(inBus)+freq.linlin(-1, 1, 10, 880)); //this sine oscillator takes a frequency control value between -1 and 1
+SynthDef(\sinewave, {|freq = 1, amp=0.5, bus=0, inBus=65|
+	var output = SinOsc.ar(In.ar(inBus).linexp(-1, 1, 100, 1000) /*freq.linexp(-1, 1, 100, 1000)*/); //this sine oscillator takes a frequency control value between -1,1
 	Out.ar(bus, output*amp);
 }).add;
 );
 
 s.sendMsg(\s_new, "arbitrary", 1010, 1, 1);
 
-//s.sendMsg(\c_set, 402, -0.5); // create the bus
-
 s.sendMsg(\s_new, "sinewave", 1020, 1, 1);
 
-//s.sendMsg(\n_set, 1010, \bus, 402);
+s.sendMsg(\n_set, 1010, \bus, 65); //change to "control-mode"
 
-s.sendMsg(\n_set, 1020, \freq, 0.4);
+s.sendMsg(\n_set, 1010, \bus, 0); //change to "oscillator-mode"
 
-//s.sendMsg(\n_map, 1020, "freq", 402); // ask this synth to read the freq from this bus
-
-s.sendMsg(\n_set, 1010, \freq, 1);
-
-s.sendMsg(\n_set, 1010, \mul, 1000);
-
-s.sendMsg(\n_set, 1010, \add, 10);
+//next line is an alternative to "inBus", uncomment it in the synthdef for sinewave as well. Why isn't this working?
+s.sendMsg(\n_map, 1020, "freq", 65); // ask this synth to read the freq from this bus
 
 //s.reboot
 //s.boot
