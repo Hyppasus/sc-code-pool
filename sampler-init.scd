@@ -45,12 +45,11 @@ Server.default.waitForBoot{
 			bufframes = BufFrames.ir(bufnum);
 			start = start * bufframes;
 			end = end * bufframes;
-			lenght = (start + end) % bufframes;
 			phase = Phasor.ar(
 				0,
 				rate * rev * BufRateScale.ir(bufnum),
 				start,
-				lenght,
+				end,
 			);
 			output = BufRd.ar(1, bufnum, phase, loop);
 			Out.ar(bus, output * amp);
