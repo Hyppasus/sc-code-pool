@@ -96,10 +96,6 @@ Server.default.waitForBoot{
 
 	MIDIFunc.cc({|val,num,ch,src| ~jitter.value(val.linlin(0, 127, 0, 1))}, ~jitterCC, ~channelMIDI);
 
-	MIDIFunc.cc({|val, num, ch, src| if(val == 127 and:{val != 0}){
-		var depthJitter;
-		depthJitter = depthJitter
-	}}, ~bufPrevCC, ~channelMIDI);
 
 	MIDIFunc.cc({|val, num, ch, src| if(val == 127 and:{val != 0}){
 		~bufNum = ~bufNum + 1 % ~pathSize;
@@ -116,3 +112,13 @@ Server.default.waitForBoot{
 	"\n \n \n Ready to play".postln;
 }
 )
+
+
+
+/*
+add more scanning mode
+random pitch
+jitter crazy mode?
+*/
+
+~buffer.plot
