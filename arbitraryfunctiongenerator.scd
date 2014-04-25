@@ -1,4 +1,4 @@
-
+/*
 //Debugging
 
 y={|bus=65, out=0|Out.ar(out,SinOsc.ar(In.ar(bus)+200,0,1,0))}.play;
@@ -7,23 +7,29 @@ x.set(\out,65);
 x.set(\freq, 1);
 x.set(\mul, 100);
 x.set(\add, 100);
-
+*/
 
 /*#####################################################################################################################################*/
 // new version
 
-~bufTableCar=Buffer.alloc(s, 1024, bufnum:0);
-~envTableCar=Env([0] ++ [-1, 0.5] ++ 0, [0.1, 0.1, 0.1], \sine).asSignal(512).asWavetable;~bufTableCar.setn(0, ~envTableCar);
-~allvalues = [0, 0, 0, 0, 0, 0, 0, 0];
-~waveformPosition = 0;
+Server.default.waitForBoot{
 
-//~envTableCar.plot;
-~ampArbitraryCC = 16;
-~freqArbitraryCC = 17;
-//~waveformArbitraryCC = [0, 1, 2, 3, 4, 5, 6, 7];
-~waveformArbitraryCC = [18];
-~waveformArbitraryPositionCC = [61, 62];
-~ledCC = [ 32, 33, 34, 35, 36, 37, 38, 39 ];
+	s = Server.default;
+
+	~bufTableCar=Buffer.alloc(s, 1024, bufnum:0);
+	~envTableCar=Env([0] ++ [-1, 0.5] ++ 0, [0.1, 0.1, 0.1], \sine).asSignal(512).asWavetable;~bufTableCar.setn(0, ~envTableCar);
+	~allvalues = [0, 0, 0, 0, 0, 0, 0, 0];
+	~waveformPosition = 0;
+
+	s.sync;
+
+	//~envTableCar.plot;
+	~ampArbitraryCC = 16;
+	~freqArbitraryCC = 17;
+	//~waveformArbitraryCC = [0, 1, 2, 3, 4, 5, 6, 7];
+	~waveformArbitraryCC = [18];
+	~waveformArbitraryPositionCC = [61, 62];
+	~ledCC = [ 32, 33, 34, 35, 36, 37, 38, 39 ];
 
 //TODO LEDS: light intensity vs blinking frequency to communicate the state of each step (maybe rgb leds WS2812 ;)
 //TODO: use the remaining potentiometer to control portamento/interpolation function
@@ -32,6 +38,8 @@ x.set(\add, 100);
 MIDIClient.init;
 MIDIIn.connectAll;
 m=MIDIOut(0);
+
+	s.sync;
 
 MIDIFunc.cc({|val,num,ch,src| ~ampArbitrary.value(val.linlin(0, 127, 0.0, 1.0))}, ~ampArbitraryCC, nil);
 MIDIFunc.cc({|val,num,ch,src| ~freqArbitrary.value(val.linexp(0, 127, 0.1, 5000.0))}, ~freqArbitraryCC, nil);
@@ -58,6 +66,8 @@ MIDIFunc.cc({|val, num, ch, src| ~waveformArbitraryPosition.value(num, val)}, ~w
 };
 );
 
+	s.sync;
+
 (
 ~waveformArbitraryPosition = {|num, val|
 	~waveformPosition.postln;
@@ -75,6 +85,7 @@ MIDIFunc.cc({|val, num, ch, src| ~waveformArbitraryPosition.value(num, val)}, ~w
 };
 );
 
+	s.sync;
 
 // SynthDefs
 (
@@ -94,6 +105,8 @@ SynthDef(\sinewave, {|freq = 1, amp=0.5, bus=0, inBus=65|
 }).add;
 );
 
+	s.sync;
+
 s.sendMsg(\s_new, "arbitrary", 1010, 1, 1);
 
 s.sendMsg(\s_new, "sinewave", 1020, 1, 1);
@@ -108,4 +121,8 @@ s.sendMsg(\n_set, 1020, \amp, 0);
 s.sendMsg(\n_map, 1020, "freq", 65); // ask this synth to read the freq from this bus
 
 //s.reboot
+
+
 //s.boot
+
+}
