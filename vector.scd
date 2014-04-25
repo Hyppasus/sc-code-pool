@@ -18,7 +18,7 @@ The code:
 
 */
 
-s.boot;
+Server.default.waitForBoot{ s = Server.default;
 
 /*
 	Allocate four 10sec buffers for the four stereo sound sources.
@@ -28,7 +28,7 @@ a = Buffer.alloc(s, s.sampleRate * 10, 2);
 b = Buffer.alloc(s, s.sampleRate * 10, 2);
 c = Buffer.alloc(s, s.sampleRate * 10, 2);
 d = Buffer.alloc(s, s.sampleRate * 10, 2);
-)
+); s.sync;
 
 /*
 	For now, we're allocating the files from the HDD.
@@ -38,7 +38,7 @@ a.allocRead("/home/andre/Documents/SibA/Supercollider/git/sounds/1.wav");
 b.allocRead("/home/andre/Documents/SibA/Supercollider/git/sounds/5.wav");
 c.allocRead("/home/andre/Documents/SibA/Supercollider/git/sounds/6.wav");
 d.allocRead("/home/andre/Documents/SibA/Supercollider/git/sounds/7.wav");
-)
+); s.sync;
 
 /*
 	Prepare SynthDefs for buffer playback and amp control.
@@ -59,7 +59,7 @@ SynthDef(\buf, {
 	PlayBuf.ar(2, bufnum, 1, 1, 0, 1)*amp;
 	)*/
 	}).add;
-)
+); s.sync;
 
 /*
 	Set SynthDef default values
@@ -79,7 +79,7 @@ h = Synth(\buf);
 h.set(\bufnum, d);
 h.set(\amp, 0);
 
-)
+); s.sync;
 
 /*
 	Control point movement vars init.
@@ -117,7 +117,7 @@ h.set(\amp, 0);
   ~shift2=0;
   ~shift3=0;
   ~shift4=0;
-)
+); s.sync;
 
 //midi binding
 (
@@ -129,6 +129,7 @@ MIDIIn.noteOn = { arg src, chan, num, vel; ~lastNote=num;};
 MIDIIn.noteOff = { arg src, chan, num, vel; ~lastNote="-1";};
 
 ~control={arg port, ch, num, val;
+	//TODO: switch
 	if(num==1){~freeze1=val.linlin(0, 127, 0.0, 1.0)};
 	if(num==2){~freeze2=val.linlin(0, 127, 0.0, 1.0)};
 	if(num==5){~freeze3=val.linlin(0, 127, 0.0, 1.0)};
@@ -142,12 +143,13 @@ MIDIIn.noteOff = { arg src, chan, num, vel; ~lastNote="-1";};
 
 MIDIIn.addFuncTo('control', ~control);
 
-)
+); s.sync;
 
 //control point movement call
 (
 m = {
    //assing user pull values, give -1 to disable pull
+	//TODO swith override
 	~pullToX = if (~lastNote == 36, //magic number!
 		{
 			0;
@@ -295,7 +297,7 @@ m = {
 
 	*/
 }
-)
+); s.sync;
 
 
 
@@ -305,7 +307,7 @@ m = {
 		m.value;
 		0.01;
 	}
-);)
+);); s.sync;
 
 
 
@@ -322,7 +324,7 @@ p = {
 
 
 
-)
+); s.sync;
 
 //what does this do??
 (SystemClock.sched(0.0,
@@ -331,15 +333,17 @@ p = {
 		p.value;
 		0.01;
 	}
-);)
+);); s.sync;
+
+};
 
 
 //cleanup the mess
-SystemClock.clear;
+/*SystemClock.clear;
 
 (
 a.free;
 b.free;
 c.free;
 d.free;
-)
+)*/
