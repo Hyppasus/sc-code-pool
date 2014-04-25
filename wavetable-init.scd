@@ -134,7 +134,7 @@ Server.default.waitForBoot{
 	*/
 
 	~ampCar = {|amp = 0| s.sendMsg(\n_set, 1010, \amp, amp)};
-	~freqCar = {|freq = 440| s.sendBundle(nil,[\n_set, 1010, \freq, freq])};
+	~freqCar = {|freq = 440| s.sendMsg(\n_set, 1010, \freq, freq)};
 	~freqMod = {|freq = 440| s.sendMsg(\n_set, 1030, \freq, freq)};
 	~mulMod = {|mul = 0| s.sendMsg(\n_set, 1030, \mul, mul)};
 	~addMod = {|add = 0| s.sendMsg(\n_set, 1030, \add, add)};
