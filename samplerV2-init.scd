@@ -26,9 +26,6 @@ Server.default.waitForBoot{
 	~pitchJittCC = 69;
 	~pitchJittDepthCC = 70;
 
-
-
-
 	~channelMIDI = 0;
 
 	s.sync;
@@ -148,6 +145,6 @@ Server.default.waitForBoot{
 add more scanning mode, see Mix.fill or Select
 random pitch
 jitter crazy mode?
-*/
 
 ~buffer.plot
+*/
