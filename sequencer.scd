@@ -93,6 +93,14 @@ Server.default.waitForBoot {
 
 	// MIDI knob mappings (note duration and deviation)
 
+	~midiCC1 = 33;
+	~midiCC2 = 34;
+	~midiCC3 = 110;
+	~midiCC4 = 111;
+	~midiCC5 = 14;
+	~midiCC6 = 15;
+	~midiCC7 = 49;
+
 	MIDIFunc.cc({|value, num, chan, src|
 
 		var scaled = value.linlin(0, 127, 0, 3);
@@ -103,7 +111,7 @@ Server.default.waitForBoot {
 		if (scaled > 2, {~duration = 0.125});
 		if (scaled > 2.5, {~duration = 0.0625});
 
-	}, 33);
+	}, ~midiCC1);
 
 	MIDIFunc.cc({|value, num, chan, src|
 
@@ -134,7 +142,7 @@ Server.default.waitForBoot {
 		});
 
 
-	}, 34);
+	}, ~midiCC2);
 
 	// MIDI button mappings (drums play/stop)
 
@@ -144,7 +152,7 @@ Server.default.waitForBoot {
 			if (~kickPlay, {Pdef(\kickPattern).stop; ~kickPlay = false}, {Pdef(\kickPattern).play; ~kickPlay = true});
 		});
 
-	}, 110);
+	}, ~midiCC3);
 
 	MIDIFunc.cc({|value|
 
@@ -152,7 +160,7 @@ Server.default.waitForBoot {
 			if (~snarePlay, {Pdef(\snarePattern).stop; ~snarePlay = false}, {Pdef(\snarePattern).play; ~snarePlay = true});
 		});
 
-	}, 111);
+	}, ~midiCC4);
 
 	MIDIFunc.cc({|value|
 
@@ -160,7 +168,7 @@ Server.default.waitForBoot {
 			if (~hatPlay, {Pdef(\hatPattern).stop; ~hatPlay = false}, {Pdef(\hatPattern).play; ~hatPlay = true});
 		});
 
-	}, 14);
+	}, ~midiCC5);
 
 	MIDIFunc.cc({|value|
 
@@ -168,7 +176,7 @@ Server.default.waitForBoot {
 			if (~hiTomPlay, {Pdef(\hiTomPattern).stop; ~hiTomPlay = false}, {Pdef(\hiTomPattern).play; ~hiTomPlay = true});
 		});
 
-	}, 15);
+	}, ~midiCC6);
 
 	MIDIFunc.cc({|value|
 
@@ -176,7 +184,7 @@ Server.default.waitForBoot {
 			if (~lowTomPlay, {Pdef(\lowTomPattern).stop; ~lowTomPlay = false}, {Pdef(\lowTomPattern).play; ~lowTomPlay = true});
 		});
 
-	}, 49);
+	}, ~midiCC7);
 
 	s.sync;
 
@@ -209,4 +217,4 @@ Server.default.waitForBoot {
 }
 )
 
-Pdef.clear; // (just in case...)
+//Pdef.clear; // (just in case...)
