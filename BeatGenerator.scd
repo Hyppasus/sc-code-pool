@@ -82,28 +82,31 @@ Server.default.waitForBoot{
 
 	// INSTRUMENTs declaration
 
-	SynthDef(\kick, {|bus = 0, amp = 0, pitch = 150|
-		var pitchEnv = EnvGen.kr(Env.perc(0.001,0.8,1,-4), 1, doneAction: 2);
-		var bd = SinOsc.ar(pitch * pitchEnv);
-		var volEnv = EnvGen.kr(Env.perc(0.001, 0.8, 1, -4), 1, doneAction: 2);
+	SynthDef(\kick, {|bus = 0, pitch = 150, amp = 0|
+		var
+		pitchEnv = EnvGen.kr(Env.perc(0.001,0.8,1,-4), 1, doneAction: 2),
+		bd = SinOsc.ar(pitch * pitchEnv),
+		volEnv = EnvGen.kr(Env.perc(0.001, 0.8, 1, -4), 1, doneAction: 2);
 		Out.ar(~busKK, Pan2.ar(bd * volEnv, 0, amp));
 	}).add;
 
-	SynthDef(\snare, {|bus = 0, amp = 0, pitch = 100|
-		var pitchEnv = EnvGen.kr(Env.perc(0.01, 0.2, 1, -1), 1, doneAction:2);
-		var snareTop = SinOsc.ar(pitch * pitchEnv) - WhiteNoise.ar(0.5, 0.5);
-		var snareBottom = PinkNoise.ar(1);
-		var volEnv = EnvGen.kr(Env.perc(0.001, 0.2, 1, -10), 1, doneAction: 2);
+	SynthDef(\snare, {|bus = 0, pitch = 100, amp = 0|
+		var
+		pitchEnv = EnvGen.kr(Env.perc(0.01, 0.2, 1, -1), 1, doneAction:2),
+		snareTop = SinOsc.ar(pitch * pitchEnv) - WhiteNoise.ar(0.5, 0.5),
+		snareBottom = PinkNoise.ar(1),
+		volEnv = EnvGen.kr(Env.perc(0.001, 0.2, 1, -10), 1, doneAction: 2);
 		Out.ar(~busSN, Pan2.ar((snareTop + snareBottom) * volEnv, 0, amp));
 	}).add;
 
-	SynthDef(\hithat, {|bus = 0, amp = 0, pitch = 4000|
-		var pitchEnv = EnvGen.kr(Env([1.0, 0.2, 0.2], [0.5, 0.5]), 1, doneAction: 2);
-		var hatNoise = PinkNoise.ar(1);
-		var hatPing = SinOsc.ar(pitch * pitchEnv, mul: 0.5);
-		var hatMod = SinOsc.ar(110, mul:0.2);
-		var ringMod = hatPing * hatMod;
-		var volEnv = EnvGen.kr(Env.perc(0.01, 0.01, 1, -20), 1, doneAction: 2);
+	SynthDef(\hithat, {|bus = 0, pitch = 4000, amp = 0|
+		var
+		pitchEnv = EnvGen.kr(Env([1.0, 0.2, 0.2], [0.5, 0.5]), 1, doneAction: 2),
+		hatNoise = PinkNoise.ar(1),
+		hatPing = SinOsc.ar(pitch * pitchEnv, mul: 0.5),
+		hatMod = SinOsc.ar(110, mul:0.2),
+		ringMod = hatPing * hatMod,
+		volEnv = EnvGen.kr(Env.perc(0.01, 0.01, 1, -20), 1, doneAction: 2);
 		Out.ar(~busHH, Pan2.ar((ringMod + hatNoise) * volEnv, 0, amp));
 	}).add;
 
@@ -255,17 +258,18 @@ Server.default.waitForBoot{
 
 	MIDIFunc.cc({ |value|
 		var
-		pb1 = value.linlin(0, 127, 0.5, 0.0),
-		pb2 = value.linlin(0, 127, 1.0, 0.5),
-		pb3 = value.linlin(0, 127, 0.0, 0.4),
-		pb4 = value.linlin(0, 127, 0.0, 0.2);
+		pb1 = value.linlin(0, 127, 0.2, 0.0),
+		pb2 = value.linlin(0, 127, 1.0, 0.7),
+		pb3 = value.linlin(0, 127, 0.5, 0.1),
+		pb4 = value.linlin(0, 127, 0.0, 0.1);
 		~probHH = [pb1, pb2, pb3, pb4].normalizeSum;
-		~patternHH = Array.fill(~events, {[ 1/2, 1/4, 1/8, 1/16].wchoose(~probHH)});
+		~patternHH = Array.fill(~events, {[1, 1/2, 1/4, 1/8].wchoose(~probHH)});
 
 		Pdef(\playHH, Pbind (\instrument, \hithat,
 			\pitch, Pfunc({~pitchHH}),
 			\amp, Pfunc({~ampHH}),
 			\dur, Pseq(~patternHH, inf)));
+		//~patternHH.postln
 	}, ~patternHHCC, ~chMIDI);
 
 	MIDIFunc.cc({|val| ~pitchHHFunc.value(val.linlin(0, 127, 4000.0, 12000.0))}, ~pitchHHCC, ~chMIDI);
@@ -298,6 +302,7 @@ Server.default.waitForBoot{
 
 	Pdef(\playKK).play(quant:Quant(1));
 	Pdef(\playSN).play(quant:Quant(1));
+	Pdef(\playHH).play(quant:Quant(1));
 
 	s.sync;
 
