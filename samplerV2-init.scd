@@ -57,7 +57,7 @@ Server.default.waitForBoot{
 		SynthDef(\sampler,{
 			|bus=0, bufnum=0, rate=1, rev=1, start=0, lenght=1, loop=1, loopJitt=0, loopJittDepth=0, pitchJitt=0, pitchJittDepth=0, amp=1|
 			var output, end, phase, bufframes, jitStart, jitLenght, jitRate;
-			bufframes = BufFrames.ir(bufnum);
+			bufframes = BufFrames.kr(bufnum);
 			jitStart = LFNoise0.ar(10, loopJittDepth) * loopJitt;
 			jitLenght = LFNoise0.ar(20, loopJittDepth) * loopJitt;
 			start = ((start + jitStart) * bufframes) % bufframes;
